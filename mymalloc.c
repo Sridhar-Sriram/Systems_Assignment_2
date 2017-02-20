@@ -13,13 +13,20 @@ typedef Struct _metaData{
 
 }metaData;
 
-createNode(size_t pointerSize,char usage){
-	metaData->size=pointerSize;
-	metaData->use=usage;
+metaData createNode(size_t pointerSize, char usage){
+	metaData Node;
+	Node.size=pointerSize;
+	Node.use=usage;
+
+	return Node;
 }
 
 void * malloc(size_t size){
-	metaData * meta=createNode
+	if(myblock[0]==NULL){
+		metaData Node=createNode(size,'y');
+		return void * ptr=&myblock[sizeof(Node)];
+	}
+
 
 
 
