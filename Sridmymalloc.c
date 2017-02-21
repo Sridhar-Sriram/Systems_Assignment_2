@@ -13,6 +13,7 @@ typedef struct _metaData{
 
 }metaData;
 
+
 metaData*createNode(size_t, char);
 void * mymalloc (size_t);
 
@@ -24,6 +25,39 @@ metaData* createNode(size_t pointerSize, char usage){
 	return new_node;
 }
 
-void * mymalloc(size_t size){
-
+void * mymalloc(size_t requested_size){
+    metaData*head = //head;
+    metaData*search = head;
+    while(search!= NULL){
+        int size_of_current_node = search->size;
+        if(search->size >requested_size && search->use == 'n' ){
+            // create a "used" metadata node with corresponding size
+            metaData* precede_node = createNode(requested_size, 'y');
+             /*
+            1. check to see if remaining space is enough to hold metadata AND whatever information may proceed in the future
+                a. how to do so: 
+              
+                if(size_of_current_node - (sizeof(metadata) + precede_node->size) > sizeof(metaData) + 1)
+              
+            2. if not at least metadata +1 space, THEN: 
+              
+              -> return address of (char*)precede_node +1
+              -> no created node
+              
+            3. if there is enough space, create a post_node with appropriate spacing
+              -> return address of (char*)precede_node +1
+              
+              */
+            size_t remaining_size =size_of_current_node - ((sizeof(metadata) + precede_node->size);
+            
+            if(remaining_size >= (sizeof(metaData) + 1)){
+                metaData*post_node= createNode(remaining_size - sizeof(metaData), 'y');
+                return &((void*) ((char*)precede_node + 1));
+            }else{
+                return &((void*) ((char*)precede_node + 1));s
+            }
+        }
+    }
+    search = (metaData*)(((char*)search + 1) +size);
+    
 }
