@@ -31,8 +31,16 @@ void * mymalloc(size_t requested_size){
     while(search!= NULL){
         int size_of_current_node = search->size;
         if(search->size >requested_size && search->use == 'n' ){
-            // create a "used" metadata node with corresponding size
-            metaData* precede_node = createNode(requested_size, 'y');
+            /*
+             1. copy the current node into another node
+            
+             2. change the usage and size to accommodate to requested size
+            
+             
+             */
+            metaData* post_node = search;
+            search->size = requested_size;
+            search->use = 'y';
              /*
             1. check to see if remaining space is enough to hold metadata AND whatever information may proceed in the future
                 a. how to do so: 
@@ -54,10 +62,12 @@ void * mymalloc(size_t requested_size){
                 metaData*post_node= createNode(remaining_size - sizeof(metaData), 'y');
                 return &((void*) ((char*)precede_node + 1));
             }else{
-                return &((void*) ((char*)precede_node + 1));s
+                return &((void*) ((char*)precede_node + 1));
             }
+        }else{
+            search = (metaData*)(((char*)search + 1) +size);
         }
     }
-    search = (metaData*)(((char*)search + 1) +size);
     
+    return void* NULL;
 }
