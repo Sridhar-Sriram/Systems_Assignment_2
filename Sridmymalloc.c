@@ -7,27 +7,23 @@
 
 static char myblock[5000];
 
-typedef Struct _metaData{
+typedef struct _metaData{
 	size_t size;
 	char use;
 
 }metaData;
 
+metaData*createNode(size_t, char);
+void * mymalloc (size_t);
+
 // creating Nodes for proper usage
 metaData* createNode(size_t pointerSize, char usage){
-	metaData* new_node = (metaData*)malloc(sizeof(metaData));
-	Node->size=pointerSize;
-	Node->use=usage;
+    metaData* new_node = (metaData*)malloc(sizeof(metaData));
+	new_node->size=pointerSize;
+	new_node->use=usage;
 	return new_node;
 }
 
 void * mymalloc(size_t size){
-	if(myblock[0]==NULL){
-		metaData Node=createNode(size,'y');
-		return void * ptr=&myblock[sizeof(Node)];
-	}
-
-
-
 
 }
