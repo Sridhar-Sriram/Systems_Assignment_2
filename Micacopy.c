@@ -143,11 +143,11 @@ void * mymalloc(size_t requested_size){
             if(remaining_size >= (sizeof(metaData) + 1)){
                 metaData post_node= createNode(remaining_size - sizeof(metaData), 'n');
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
-                printf("address of metadata node AFTER space: %p \n",&post_node);
+                printf("address of metadata node AFTER space: %p \n",&myblock[iterator+(int)sizeof(metaData)+search->size]);
             }
             printf("iterator: %i\n",iterator);
             printf("address of metadata node: %p\n", &iterator);
-            printf("address of allocated space to be written into: %p\n",(&myblock[iterator] + (int)sizeof(metaData)));
+            printf("address of allocated space to be written into: %p\n",(&myblock[iterator+(int)sizeof(metaData)]));
             printf("\n");
             iterator = iterator + (int)sizeof(metaData);
             return &myblock[iterator];
@@ -166,11 +166,13 @@ void * mymalloc(size_t requested_size){
 }
 
 int main(int argc, char **argv){
-
+    
 	printf("address of array: %p\n",myblock);
 	void * pointer=mymalloc(25);
 	printf("address of pointer: %p\n",pointer);
 	void * pointer2=mymalloc(30);
 	printf("address of pointer2: %p\n",pointer2);
-	
+    
+    printf("\n");
+    return 0;
 }
