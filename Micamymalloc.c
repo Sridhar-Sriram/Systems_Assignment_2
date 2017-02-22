@@ -14,55 +14,66 @@ typedef struct _metaData{
 }metaData;
 
 
-metaData createNode(size_t, char);
-void * mymalloc (size_t);
+// metaData createNode(size_t, char);
+// void * mymalloc (size_t);
 
 // creating Nodes for proper usage
 metaData createNode(size_t pointerSize, char usage){
     metaData Node;
     Node.size=pointerSize;
     Node.use=usage;
-
+  
     return Node;
 }
 
 void * mymalloc(size_t requested_size){
-    if(myblock[0]==NULL){
-        metaData Node=createNode(size,'y');
-        return void * ptr=&myblock[sizeof(Node)];
-    }
 
-    metaData*search = &myblock[0];
-    while(search!= NULL){
-        int size_of_current_node = search->size;
-        if(search->size >requested_size && search->use == 'n' ){
+	metaData * search = (metaData*)&myblock[0];
+
+    if(myblock[0]=='\0'){
+        metaData Node=createNode(requested_size,'n');
+        memcpy(&myblock[0],&Node,sizeof(metaData));
+        return &myblock[0] + sizeof(metaData);
+        //return &((void*)((char*)Node+1));
+    }
+    int iterator=0;
+    while(iterator<=5000){
+
+    	if(search==NULL){
+        	search=(metaData*)(((char*)search + 1)+sizeof(char));
+        	iterator+=1;
+        	continue;
+        }
+        
+        if(search->size > requested_size && search->use == 'n' ){
             // create a "used" metadata node with corresponding size
-            metaData* precede_node = createNode(requested_size, 'y');
-             /*
-            1. check to see if remaining space is enough to hold metadata AND whatever information may proceed in the future
-                a. how to do so: 
-              
-                if(size_of_current_node - (sizeof(metadata) + precede_node->size) > sizeof(metaData) + 1)
-              
-            2. if not at least metadata +1 space, THEN: 
-              
-              -> return address of (char*)precede_node +1
-              -> no created node
-              
-            3. if there is enough space, create a post_node with appropriate spacing
-              -> return address of (char*)precede_node +1
-              
-              */
-            size_t remaining_size =size_of_current_node - ((sizeof(metadata) + precede_node->size);
+            int size_of_current_node = search->size;
+            search->use='y';
+            search->size=requested_size;
+    
+            size_t remaining_size =size_of_current_node - (sizeof(metaData) + requested_size);
             
             if(remaining_size >= (sizeof(metaData) + 1)){
-                metaData*post_node= createNode(remaining_size - sizeof(metaData), 'y');
-                return &((void*) ((char*)precede_node + 1));
-            }else{
-                return &((void*) ((char*)precede_node + 1));s
+                metaData post_node= createNode(remaining_size - sizeof(metaData), 'n');
+                memcpy(&myblock[iterator],&post_node,sizeof(metaData));
             }
+                return &myblock[iterator] + sizeof(metaData);
+                //return &((void*)((char*)search + 1)+search->size);
         }
+
+        iterator+=sizeof(metaData)+search->size;
+        search = (metaData*)(((char*)search + 1) +search->size);
+
     }
-    search = (metaData*)(((char*)search + 1) +size);
+
+    printf("No space available.");
     
+    return NULL;
+    
+}
+
+int main(int argc, char **argv){
+
+	void * pointer=mymalloc(10);
+	printf("%p\n",pointer);
 }
