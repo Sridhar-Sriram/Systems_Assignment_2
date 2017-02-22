@@ -29,33 +29,47 @@ metaData createNode(size_t pointerSize, char usage){
 void myfree(void*ptr){
 
 	int iterator=0;
+
 	while(myblock[iterator]=='\0'){
 		iterator++;
 	}
+
     metaData*current_pointer = (metaData*)&myblock[iterator];
     metaData*prev = NULL;
     
-    while(current_pointer+1!= (metaData*)&ptr){
+    while(iterator<=5000){
+    	if(current_pointer+1!= (metaData*)&ptr){
+    		
+    		break;
+    	}
     	iterator+=(int)sizeof(metaData)+current_pointer->size;
         prev = current_pointer;
         current_pointer = (metaData*)&myblock[iterator];
-        
     }
+
     iterator+=(int)sizeof(metaData)+current_pointer->size;
     metaData*post=(metaData*)&myblock[iterator];
 
     if(current_pointer!=NULL && current_pointer->use == 'y'){
+
         current_pointer->use = 'n';
     }else if(current_pointer==NULL || current_pointer->use=='n' ){
+
         printf("invalid free \n");
         return;
-    }if(prev!=NULL){
-        if(prev->use == 'n'){
-            prev->size = prev->size + sizeof(metaData) + current_pointer->size;
-        }
-        if(post!=NULL&&post->use=='n'){
-        	prev->size=post->size+sizeof(metaData);
-        }
+    }if(prev==NULL&&post!=NULL){
+
+    	if(post->use=='n'){
+    		printf("hello\n");
+    		current_pointer->size=current_pointer->size+sizeof(metaData)+post->size;
+    		return;
+   		 }
+    }
+    if(prev!=NULL&&prev->use == 'n'){
+        prev->size = prev->size + sizeof(metaData) + current_pointer->size;
+    }
+    if(post!=NULL&&post->use=='n'){
+      	prev->size=post->size+sizeof(metaData);
     }
 }
 
@@ -71,11 +85,10 @@ void * mymalloc(size_t requested_size){
         if(5000-requested_size-sizeof(metaData)>=(sizeof(metaData)+1)){
     
         	metaData post_node= createNode(5000-requested_size - sizeof(metaData)*2, 'n');
-
-            memcpy(&myblock[sizeof(metaData)*2+requested_size],&post_node,sizeof(metaData));
+        	printf("post use: %c\n",post_node.use);
+            memcpy(&myblock[sizeof(metaData)+requested_size],&post_node,sizeof(metaData));
             //should I make separate function
         }
-        //printf("search size: %c\n",search->use);
         return &myblock[0] + sizeof(metaData);
         //return &((void*)((char*)Node+1));
     }
@@ -118,12 +131,13 @@ void * mymalloc(size_t requested_size){
 }
 
 int main(int argc, char **argv){
-	int i;
+
 	printf("address of array: %p\n",myblock);
-	for(i=1;i<=10;i++){
-		void * pointer=mymalloc(i);
-		printf("address of pointer: %p\n",pointer);
-		free(pointer);
-	}
+	void * pointer=mymalloc(10);
+	printf("address of pointer: %p\n",pointer);
+	myfree(pointer);
+	void * pointer2=mymalloc(10);
+	printf("address of pointer: %p\n",pointer);
+	printf("address of pointer2: %p\n",pointer2);
 	
 }
