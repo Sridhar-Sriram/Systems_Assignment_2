@@ -25,10 +25,11 @@ metaData createNode(size_t pointerSize, char usage){
 
     return Node;
 }
-
+ls
 void * mymalloc(size_t requested_size){
-    if(myblock[0]==NULL){
-        metaData Node=createNode(size,'y');
+    if(myblock[0]=='\0'){
+        metaData firstNode=createNode(requested_size,'y');
+        memcpy(myblock[0], &firstNode, sizeof(metaData));
         return void * ptr=&myblock[sizeof(Node)];
     }
 
