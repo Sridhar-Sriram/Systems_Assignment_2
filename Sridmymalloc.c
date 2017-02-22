@@ -16,6 +16,8 @@ typedef struct _metaData{
 
 metaData createNode(size_t, char);
 void * mymalloc (size_t);
+void myfree(address);
+
 
 // creating Nodes for proper usage
 metaData createNode(size_t pointerSize, char usage){
@@ -25,7 +27,25 @@ metaData createNode(size_t pointerSize, char usage){
 
     return Node;
 }
-ls
+void myfree(void*ptr){
+    metaData*search = &myblock[0];
+    metaData*prev = NULL;
+    while(((char*)search + 1) != &ptr){
+        prev = search;
+        search = (metaData*)(((char*)search + 1) +size);
+        
+    }
+    if(search!=NULL && search->use == 'y'){
+        search->use = 'n';
+    }else if(search==NULL || search->use=='n' ){
+        printf("invalid free \n");
+        return;
+    }if(prev!=NULL){
+        if(prev->use == 'n'){
+            prev->size = prev->size + sizeof(metaData) + search->size;
+        }
+    }
+}
 void * mymalloc(size_t requested_size){
     if(myblock[0]=='\0'){
         metaData firstNode=createNode(requested_size,'y');
