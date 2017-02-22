@@ -109,13 +109,16 @@ void * mymalloc(size_t requested_size){
             search->size=requested_size;
     
             size_t remaining_size =size_of_current_node - (sizeof(metaData) + requested_size);
+            if(iterator==0){
+            	iterator=(int)sizeof(metaData);
+            }
             
             if(remaining_size >= (sizeof(metaData) + 1)){
                 metaData post_node= createNode(remaining_size - sizeof(metaData), 'n');
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
             }
             printf("iterator: %i\n",iterator);
-                return &myblock[iterator];
+            return &myblock[iterator];
         }
 
         iterator+=(int)sizeof(metaData)+search->size;
