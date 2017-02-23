@@ -30,7 +30,10 @@ int main(int argc, char** argv){
 }
 
 void testA(){
-    
+    int i =0;
+    for(i = 1; i<=1000; i++){
+        
+    }
 }
 
 void testB(){
