@@ -79,6 +79,12 @@ void * mymalloc(size_t requested_size){
         printf("no space available. \n");
         return NULL;
     }
+//    metaData * check_search = (metaData*)&myblock[0];
+//    int check_iterator = 0;
+//    while(check_iterator <5000){
+//        if(&myblock[iterator]==)
+//        iterator =
+//    }
 	metaData * search = (metaData*)&myblock[0];
 	//printf("meta: %zu\n",sizeof(metaData));
 
@@ -92,18 +98,25 @@ void * mymalloc(size_t requested_size){
         metaData Node=createNode(requested_size,'y');
         memcpy(&myblock[0],&Node,sizeof(metaData));
         if((5000-requested_size-(int)sizeof(metaData))>=(int)(sizeof(metaData)+1)){
-        	metaData post_node= createNode(5000-requested_size - sizeof(metaData)*2, 'n');
-        	printf("post use: %c\n",post_node.use);
+        	metaData post_node= createNode(5000-requested_size - ((int)sizeof(metaData)*2), 'n');
+        	//printf("post use: %c\n",post_node.use);
             memcpy(&myblock[sizeof(metaData)+requested_size],&post_node,sizeof(metaData));
             //should I make separate function
         }
+        ///*
+        // ALL THAT FOLLOWS ARE CHECK STATEMENTS FOR DESCRIPTIONS OF WHERE IN THE ARRAY WE ARE
+         
         printf("address of metadata node: %p\n", &myblock[0]);
+        printf("usage, size @ node: %c, %d \n ", search->use, (int)search->size);
         printf("address of allocated space to be written into: %p\n",(&myblock[0] + (int)sizeof(metaData)));
         printf("address of metadata node AFTER space: %p \n",(&myblock[0] + (int)sizeof(metaData)+search->size));
-        printf("\n");
+        int afterlocation =0 + (int)sizeof(metaData)+search->size;
+        metaData * after =(metaData*)&myblock[afterlocation];
+        printf("usage, size @ node: %c, %d\n", after->use, (int)after->size);
+       // */
+        
         return &myblock[0] + sizeof(metaData);
-        //return &((void*)((char*)Node+1));
-    }
+}
     /* 
     - ACTUAL SEARCH
     -
@@ -135,7 +148,7 @@ void * mymalloc(size_t requested_size){
             search->use='y';
             search->size=requested_size;
     
-            int remaining_size =size_of_current_node - ((int)sizeof(metaData) + requested_size);
+            int remaining_size =size_of_current_node - requested_size;
             if(iterator==0){
             	iterator=(int)sizeof(metaData);
             }
@@ -143,12 +156,19 @@ void * mymalloc(size_t requested_size){
             if(remaining_size >= (sizeof(metaData) + 1)){
                 metaData post_node= createNode(remaining_size - sizeof(metaData), 'n');
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
-                printf("address of metadata node AFTER space: %p \n",&myblock[iterator+(int)sizeof(metaData)+search->size]);
+                //printf("address of metadata node AFTER space: %p \n",&myblock[iterator+(int)sizeof(metaData)+search->size]);
             }
+            ///*
+             //ALL THAT FOLLOWS ARE CHECK STATEMENTS FOR DESCRIPTIONS OF WHERE IN THE ARRAY WE ARE
             printf("iterator: %i\n",iterator);
-            printf("address of metadata node: %p\n", &iterator);
+            printf("address of metadata node: %p\n", &myblock[iterator]);
+            printf("usage, size @ node: %c, %d\n", search->use, (int)search->size);
             printf("address of allocated space to be written into: %p\n",(&myblock[iterator+(int)sizeof(metaData)]));
-            printf("\n");
+             printf("address of metadata node AFTER space: %p \n",(&myblock[iterator] + (int)sizeof(metaData)+search->size));
+            int afterlocation =iterator + (int)sizeof(metaData)+search->size;
+            metaData * after =(metaData*)&myblock[afterlocation];
+            printf("usage, size @ node: %c, %d\n", after->use, (int)after->size);
+            //*/
             iterator = iterator + (int)sizeof(metaData);
             return &myblock[iterator];
         }
@@ -168,11 +188,21 @@ void * mymalloc(size_t requested_size){
 int main(int argc, char **argv){
     
 	printf("address of array: %p\n",myblock);
-	void * pointer=mymalloc(25);
+    printf("\n");
+	void * pointer=mymalloc(985);
 	printf("address of pointer: %p\n",pointer);
-	void * pointer2=mymalloc(30);
+    printf("\n");
+	void * pointer2=mymalloc(985);
 	printf("address of pointer2: %p\n",pointer2);
-    
+    printf("\n");
+    void*pointer3=mymalloc(985);
+    printf("address of pointer3: %p \n",pointer3);
+    printf("\n");
+    void*pointer4=mymalloc(985);
+    printf("address of pointer4: %p \n",pointer4);
+    printf("\n");
+    void*pointer5=mymalloc(963);
+    printf("address of pointer5: %p \n",pointer5);
     printf("\n");
     return 0;
 }
