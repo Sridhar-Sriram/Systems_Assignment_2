@@ -26,56 +26,128 @@ metaData createNode(size_t pointerSize, char usage){
     return Node;
 }
 
-void myfree(void*ptr){
-
-	int iterator=0;
-
-	while(myblock[iterator]=='\0'){
-		iterator++;
-	}
-
-    metaData*current_pointer = (metaData*)&myblock[iterator];
-    metaData*prev = NULL;
+void myfree(void*pointer_to_be_freed){
     
-    while(iterator<=5000){
-    	if(current_pointer+1!= (metaData*)&ptr){
-    		
-    		break;
-    	}
-    	iterator+=(int)sizeof(metaData)+current_pointer->size;
-        prev = current_pointer;
-        current_pointer = (metaData*)&myblock[iterator];
-    }
-
-    iterator+=(int)sizeof(metaData)+current_pointer->size;
-    metaData*post=(metaData*)&myblock[iterator];
-
-    if(current_pointer!=NULL && current_pointer->use == 'y'){
-
-        current_pointer->use = 'n';
-    }else if(current_pointer==NULL || current_pointer->use=='n' ){
-
-        printf("invalid free \n");
-        return;
-    }if(prev==NULL&&post!=NULL){
-
-    	if(post->use=='n'){
-    		printf("hello\n");
-    		current_pointer->size=current_pointer->size+sizeof(metaData)+post->size;
-    		return;
-   		 }
-    }
-    if(prev!=NULL&&prev->use == 'n'){
-        prev->size = prev->size + sizeof(metaData) + current_pointer->size;
-    }
-    if(post!=NULL&&post->use=='n'){
-      	prev->size=post->size+sizeof(metaData);
-    }
+    printf("\n");
+    printf("ENTERED MY FREE \n");
+    printf("Address of pointer before freeing: %p \n", pointer_to_be_freed);
+    pointer_to_be_freed = memcpy(&ptr,&pointer_to_be_freed,sizeof(void*));
+    printf("Address of pointer after freeing: %p\n", pointer_to_be_freed);
+    printf("\n");
+    return;
+//    
+//    if(myblock[0] == '\0'){
+//        printf("Pointer does not exist \n");
+//        return;
+//    }
+//    if(&pointer_to_be_freed == 0x0)){
+//        printf("Pointer does not exist \n");
+//        return;
+// 
+//    }
+//    
+//    int iterator = 0;
+//    metaData * search = (metaData*)&myblock[0];
+//    metaData*prev = NULL;
+//    metaData*post = NULL;
+//    
+//    while(iterator<5000){
+//        if(&(search + 1)== &ptr){
+//            break;
+//            
+//        }
+//        prev= search;
+//        iterator+=(int)sizeof(metaData) + search->size;
+//        search = (metaData*)&myblock[iterator];
+//       
+//    }
+//    // what type is the data stored in, in order to access
+//    metaData*user_data = (metaData*)&myblock[iterator+1];
+//    iterator+=(int)sizeof(metaData)+search->size;
+//    post = (metaData*)&myblock[iterator];
+//    
+//    
+//    /* FOR FOLLOWING CASES, y INDICATES USER DATA, n INDICATES UNUSED SPACE
+//     */
+//    
+//
+//    if(search!=NULL){
+//        if(search==NULL || search->use=='n' ){
+//            
+//            printf("invalid free \n");
+//            return;
+//        }else if(prev ==NULL&&search->use =='y'){
+//            search->use = 'n';
+//            printf("address BEFORE free : %p\n", &myblock[search+1]);
+//            (metaData*)(&myblock[search+1]) = NULL;
+//            printf("address AFTER free : %p\n", &myblock[search+1]);
+//
+//            return;
+//            
+//        }
+//        //case 1: user data preceding and proceeding the user data area to be free: Y current_location Y
+//        else if(search->use =='y' && prev->use== 'y' && post->use=='y'){
+//            search->use= 'n';
+//            printf("address BEFORE free : %p\n", &myblock[search+1]);
+//            (metaData*)(&myblock[search+1]) = NULL;
+//            printf("address AFTER free : %p\n", &myblock[search+1]);
+//            return;
+//        }
+//        //case 2: unused space preceding freed area, user data proceeding area: N current_location Y
+//        else if(search->use =='y' && prev->use == 'n'&&post->use == 'y'){
+//            prev->size+= (int)sizeof(metaData)+search->size;
+//            printf("address BEFORE free : %p\n", &myblock[search+1]);
+//            (metaData*)(&myblock[search+1]) = NULL;
+//            printf("address AFTER free : %p\n", &myblock[search+1]);
+//
+//            search = NULL;
+//            return;
+//        }
+//        //case 3: user data preceding freed area, unused space following: Y current_location N
+//        else if(search->use =='y' && prev->use == 'y'&&post->use == 'n'){
+//            search->use = 'n';
+//            search->size += (int)sizeof(metaData)+post->size;
+//            post = NULL;
+//            printf("address BEFORE free : %p\n", &(search+1));
+//            (metaData*)(&myblock[search+1]) = NULL;
+//            printf("address AFTER free : %p\n", &myblock[search+1]);
+//
+//            return;
+//        }
+//        // case 4: unused space preceding and proceeding freed area: N current_location N
+//
+//        else if(search->use =='y' && prev->use == 'n'&&post->use == 'n'){
+//            prev->size = (int)sizeof(metaData)*2 + search->size + post->size;
+//            printf("address BEFORE free : %p\n", &myblock[search+1]);
+//            (metaData*)(&myblock[search+1]) = NULL;
+//            printf("address AFTER free : %p\n", &myblock[search+1]);
+//            search = NULL;
+//            post = NULL;
+//            &(search+1) = NULL;
+//            return;
+//        }
+//        else{
+//            printf("invalid free \n");
+//            return;
+//        }
+//
+//        
+//    }else{
+//        printf("invalid free \n");
+//        return;
+//    }
+//    /*
+//	FOLLOWING PRECEDED SEARCH
+//     
+//     UNDERSTAND/ASK MICA
+//	while(myblock[iterator]=='\0'){
+//		iterator++;
+//     */
 }
 
 void * mymalloc(size_t requested_size){
     //checking to see if invalid size is asked for
-    if((int)requested_size >=(5000-(int)sizeof(metaData))){
+    if((int)requested_size >(5000-(int)sizeof(metaData))){
         printf("no space available. \n");
         return NULL;
     }
@@ -189,20 +261,14 @@ int main(int argc, char **argv){
     
 	printf("address of array: %p\n",myblock);
     printf("\n");
-	void * pointer=mymalloc(985);
+	void * pointer=mymalloc(10);
 	printf("address of pointer: %p\n",pointer);
-    printf("\n");
-	void * pointer2=mymalloc(985);
-	printf("address of pointer2: %p\n",pointer2);
-    printf("\n");
-    void*pointer3=mymalloc(985);
-    printf("address of pointer3: %p \n",pointer3);
-    printf("\n");
-    void*pointer4=mymalloc(985);
-    printf("address of pointer4: %p \n",pointer4);
-    printf("\n");
-    void*pointer5=mymalloc(963);
-    printf("address of pointer5: %p \n",pointer5);
+    void * pointer1=mymalloc(10);
+    printf("address of pointer1: %p\n",pointer1);
+    myfree(pointer1);
+    printf("address of pointer 1: %p \n", pointer1);
+    void * pointer2=mymalloc(10);
+    printf("address of pointer2: %p\n",pointer2);
     printf("\n");
     return 0;
 }

@@ -44,7 +44,6 @@ void testA(){
 		pointer[i]=myfree();
 
 	}
-    
 }
 
 void testB(){
