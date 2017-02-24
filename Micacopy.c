@@ -14,9 +14,11 @@ typedef struct _metaData{
 }metaData;
 
 
-// metaData createNode(size_t, char);
-// void * mymalloc (size_t);
 
+
+metaData createNode(size_t, char);
+void * mymalloc (size_t);
+void myfree(void*);
 // creating Nodes for proper usage
 metaData createNode(size_t pointerSize, char usage){
     metaData Node;
@@ -27,7 +29,7 @@ metaData createNode(size_t pointerSize, char usage){
 }
 
 void myfree(void*pointer_to_be_freed){
-    
+    printf("ENTERED FREE\n");
     if(myblock[0] == '\0'){
         printf("Pointer does not exist \n");
         return;
@@ -39,7 +41,10 @@ void myfree(void*pointer_to_be_freed){
     metaData*post = NULL;
     
     while(iterator<5000){
-        if(search + 1== (metaData*)&ptr){
+        printf("DIS IS ITERATOR: %d\n", iterator);
+        
+        if(search + 1== (metaData*)pointer_to_be_freed){
+            printf("I'm about to BREAK FROM THIS SHIT \n");
             break;
         }
         prev= search;
@@ -60,30 +65,43 @@ void myfree(void*pointer_to_be_freed){
             printf("invalid free \n");
             return;
         }else if(search->use =='y'){
+            printf("address of search: %p \n", search);
             search->use = 'n';
             //case 2: unused space preceding freed area, user data proceeding area: N current_location Y
-            if(prev->use == 'n'&&post->use == 'y'){
-                prev->size+= (int)sizeof(metaData)+search->size;
-                return;
+            if(prev == NULL){
+                if(post !=NULL){
+                    if(post->use == 'n'){
+                        search->size += (int)sizeof(metaData)+post->size;
+                        return;
+                    }
+                }else{
+                    return;
+                }
+            }else{
+                if(prev->use == 'n'&&post->use == 'y'){
+                    prev->size+= (int)sizeof(metaData)+search->size;
+                    return;
+                }
+                //case 3: user data preceding freed area, unused space following: Y current_location N
+                else if(prev->use == 'y'&&post->use == 'n'){
+                    // search->use = 'n';
+                    search->size += (int)sizeof(metaData)+post->size;
+                    return;
+                }
+                // case 4: unused space preceding and proceeding freed area: N current_location N
+                else if(prev->use == 'n'&&post->use == 'n'){
+                    prev->size = (int)sizeof(metaData)*2 + search->size + post->size;
+                    return;
+                }
+                
             }
-            //case 3: user data preceding freed area, unused space following: Y current_location N
-            else if(prev->use == 'y'&&post->use == 'n'){
-                // search->use = 'n';
-                search->size += (int)sizeof(metaData)+post->size;
-                return;
-            }
-            // case 4: unused space preceding and proceeding freed area: N current_location N
-            else if(prev->use == 'n'&&post->use == 'n'){
-                prev->size = (int)sizeof(metaData)*2 + search->size + post->size;
-                return;
-            }
+            
         }
-        //case 1: user data preceding and proceeding the user data area to be free: Y current_location Y
-        
     }else{
         printf("invalid free \n");
         return;
     }
+    return;
     
 }
 
@@ -123,10 +141,6 @@ void * mymalloc(size_t requested_size){
         printf("address of metadata node: %p\n", &myblock[0]);
         printf("usage, size @ node: %c, %d \n ", search->use, (int)search->size);
         printf("address of allocated space to be written into: %p\n",(&myblock[0] + (int)sizeof(metaData)));
-        printf("address of metadata node AFTER space: %p \n",(&myblock[0] + (int)sizeof(metaData)+search->size));
-        int afterlocation =0 + (int)sizeof(metaData)+search->size;
-        metaData * after =(metaData*)&myblock[afterlocation];
-        printf("usage, size @ node: %c, %d\n", after->use, (int)after->size);
         // */
         
         return &myblock[0] + sizeof(metaData);
@@ -178,10 +192,6 @@ void * mymalloc(size_t requested_size){
             printf("address of metadata node: %p\n", &myblock[iterator]);
             printf("usage, size @ node: %c, %d\n", search->use, (int)search->size);
             printf("address of allocated space to be written into: %p\n",(&myblock[iterator+(int)sizeof(metaData)]));
-            printf("address of metadata node AFTER space: %p \n",(&myblock[iterator] + (int)sizeof(metaData)+search->size));
-            int afterlocation =iterator + (int)sizeof(metaData)+search->size;
-            metaData * after =(metaData*)&myblock[afterlocation];
-            printf("usage, size @ node: %c, %d\n", after->use, (int)after->size);
             //*/
             iterator = iterator + (int)sizeof(metaData);
             return &myblock[iterator];
@@ -203,10 +213,14 @@ int main(int argc, char **argv){
     printf("\n");
     void * pointer=mymalloc(10);
     printf("address of pointer: %p\n",pointer);
+    printf("\n");
+    myfree(pointer);
+    printf("\n");
     void * pointer1=mymalloc(10);
     printf("address of pointer1: %p\n",pointer1);
+    printf("\n");
     myfree(pointer1);
-    printf("address of pointer 1: %p \n", pointer1);
+    printf("\n");
     void * pointer2=mymalloc(10);
     printf("address of pointer2: %p\n",pointer2);
     printf("\n");
