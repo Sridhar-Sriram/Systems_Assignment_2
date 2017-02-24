@@ -13,7 +13,6 @@ typedef struct _metaData{
 
 }metaData;
 
-
 // metaData createNode(size_t, char);
 // void * mymalloc (size_t);
 
@@ -118,6 +117,7 @@ void * mymalloc(size_t requested_size){
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
             }
             printf("iterator: %i\n",iterator);
+            iterator+=(int)sizeof(metaData);
             return &myblock[iterator];
         }
 
@@ -138,7 +138,6 @@ int main(int argc, char **argv){
 	printf("address of array: %p\n",myblock);
 	void * pointer=mymalloc(10);
 	printf("address of pointer: %p\n",pointer);
-	myfree(pointer);
 	void * pointer2=mymalloc(10);
 	printf("address of pointer: %p\n",pointer);
 	printf("address of pointer2: %p\n",pointer2);

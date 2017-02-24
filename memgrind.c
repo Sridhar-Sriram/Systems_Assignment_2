@@ -1,5 +1,9 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
 
 void testA();
 void testB();
@@ -10,7 +14,7 @@ void testF();
 metaData*createNode(size_t, char);
 
 typedef Struct _metaData{
-    size_t size;
+    sizet size;
     char use;
     
 }metaData;
@@ -30,10 +34,16 @@ int main(int argc, char** argv){
 }
 
 void testA(){
-    int i =0;
-    for(i = 1; i<=1000; i++){
-        
-    }
+	int i;
+	char ** pointer;
+	for(i=0,i<1000,i++){
+		pointer[i]=(char*)mymalloc(1);
+	}
+
+	for(i=0,i<1000,i++){
+		pointer[i]=myfree();
+
+	}
 }
 
 void testB(){
