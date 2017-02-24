@@ -27,122 +27,64 @@ metaData createNode(size_t pointerSize, char usage){
 }
 
 void myfree(void*pointer_to_be_freed){
-    
-    printf("\n");
-    printf("ENTERED MY FREE \n");
-    printf("Address of pointer before freeing: %p \n", pointer_to_be_freed);
-    pointer_to_be_freed = memcpy(&ptr,&pointer_to_be_freed,sizeof(void*));
-    printf("Address of pointer after freeing: %p\n", pointer_to_be_freed);
-    printf("\n");
-    return;
-//    
-//    if(myblock[0] == '\0'){
-//        printf("Pointer does not exist \n");
-//        return;
-//    }
-//    if(&pointer_to_be_freed == 0x0)){
-//        printf("Pointer does not exist \n");
-//        return;
-// 
-//    }
-//    
-//    int iterator = 0;
-//    metaData * search = (metaData*)&myblock[0];
-//    metaData*prev = NULL;
-//    metaData*post = NULL;
-//    
-//    while(iterator<5000){
-//        if(&(search + 1)== &ptr){
-//            break;
-//            
-//        }
-//        prev= search;
-//        iterator+=(int)sizeof(metaData) + search->size;
-//        search = (metaData*)&myblock[iterator];
-//       
-//    }
-//    // what type is the data stored in, in order to access
-//    metaData*user_data = (metaData*)&myblock[iterator+1];
-//    iterator+=(int)sizeof(metaData)+search->size;
-//    post = (metaData*)&myblock[iterator];
-//    
-//    
-//    /* FOR FOLLOWING CASES, y INDICATES USER DATA, n INDICATES UNUSED SPACE
-//     */
-//    
-//
-//    if(search!=NULL){
-//        if(search==NULL || search->use=='n' ){
-//            
-//            printf("invalid free \n");
-//            return;
-//        }else if(prev ==NULL&&search->use =='y'){
-//            search->use = 'n';
-//            printf("address BEFORE free : %p\n", &myblock[search+1]);
-//            (metaData*)(&myblock[search+1]) = NULL;
-//            printf("address AFTER free : %p\n", &myblock[search+1]);
-//
-//            return;
-//            
-//        }
-//        //case 1: user data preceding and proceeding the user data area to be free: Y current_location Y
-//        else if(search->use =='y' && prev->use== 'y' && post->use=='y'){
-//            search->use= 'n';
-//            printf("address BEFORE free : %p\n", &myblock[search+1]);
-//            (metaData*)(&myblock[search+1]) = NULL;
-//            printf("address AFTER free : %p\n", &myblock[search+1]);
-//            return;
-//        }
-//        //case 2: unused space preceding freed area, user data proceeding area: N current_location Y
-//        else if(search->use =='y' && prev->use == 'n'&&post->use == 'y'){
-//            prev->size+= (int)sizeof(metaData)+search->size;
-//            printf("address BEFORE free : %p\n", &myblock[search+1]);
-//            (metaData*)(&myblock[search+1]) = NULL;
-//            printf("address AFTER free : %p\n", &myblock[search+1]);
-//
-//            search = NULL;
-//            return;
-//        }
-//        //case 3: user data preceding freed area, unused space following: Y current_location N
-//        else if(search->use =='y' && prev->use == 'y'&&post->use == 'n'){
-//            search->use = 'n';
-//            search->size += (int)sizeof(metaData)+post->size;
-//            post = NULL;
-//            printf("address BEFORE free : %p\n", &(search+1));
-//            (metaData*)(&myblock[search+1]) = NULL;
-//            printf("address AFTER free : %p\n", &myblock[search+1]);
-//
-//            return;
-//        }
-//        // case 4: unused space preceding and proceeding freed area: N current_location N
-//
-//        else if(search->use =='y' && prev->use == 'n'&&post->use == 'n'){
-//            prev->size = (int)sizeof(metaData)*2 + search->size + post->size;
-//            printf("address BEFORE free : %p\n", &myblock[search+1]);
-//            (metaData*)(&myblock[search+1]) = NULL;
-//            printf("address AFTER free : %p\n", &myblock[search+1]);
-//            search = NULL;
-//            post = NULL;
-//            &(search+1) = NULL;
-//            return;
-//        }
-//        else{
-//            printf("invalid free \n");
-//            return;
-//        }
-//
-//        
-//    }else{
-//        printf("invalid free \n");
-//        return;
-//    }
-//    /*
-//	FOLLOWING PRECEDED SEARCH
-//     
-//     UNDERSTAND/ASK MICA
-//	while(myblock[iterator]=='\0'){
-//		iterator++;
-//     */
+   
+   if(myblock[0] == '\0'){
+       printf("Pointer does not exist \n");
+       return;
+   }
+   
+   int iterator = 0;
+   metaData * search = (metaData*)&myblock[0];
+   metaData*prev = NULL;
+   metaData*post = NULL;
+   
+   while(iterator<5000){
+       if(search + 1== (metaData*)&ptr){
+           break;
+       }
+       prev= search;
+       iterator+=(int)sizeof(metaData) + search->size;
+       search = (metaData*)&myblock[iterator];
+      
+   }
+   // what type is the data stored in, in order to access
+   //metaData*user_data = (metaData*)&myblock[iterator+1];
+   iterator+=(int)sizeof(metaData)+search->size;
+   post = (metaData*)&myblock[iterator];
+   
+   /* FOR FOLLOWING CASES, y INDICATES USER DATA, n INDICATES UNUSED SPACE
+    */
+   
+   if(search!=NULL){
+       if(search->use=='n' ){
+           printf("invalid free \n");
+           return;
+       }else if(search->use =='y'){
+           search->use = 'n';
+           //case 2: unused space preceding freed area, user data proceeding area: N current_location Y
+           if(prev->use == 'n'&&post->use == 'y'){
+               prev->size+= (int)sizeof(metaData)+search->size;
+               return;
+           }
+           //case 3: user data preceding freed area, unused space following: Y current_location N
+           else if(prev->use == 'y'&&post->use == 'n'){
+              // search->use = 'n';
+               search->size += (int)sizeof(metaData)+post->size;
+               return;
+           }
+           // case 4: unused space preceding and proceeding freed area: N current_location N
+           else if(prev->use == 'n'&&post->use == 'n'){
+               prev->size = (int)sizeof(metaData)*2 + search->size + post->size;
+               return;
+           }
+       }
+       //case 1: user data preceding and proceeding the user data area to be free: Y current_location Y
+       
+   }else{
+       printf("invalid free \n");
+       return;
+   }
+
 }
 
 void * mymalloc(size_t requested_size){
@@ -250,8 +192,6 @@ void * mymalloc(size_t requested_size){
         search=(metaData*)&myblock[iterator];
 
     }
-
-    printf("No space available.\n");
     
     return NULL;
     
