@@ -29,10 +29,6 @@ void myfree(void*ptr){
 
 	int iterator=0;
 
-	while(myblock[iterator]=='\0'){
-		iterator++;
-	}
-
     metaData*current_pointer = (metaData*)&myblock[iterator];
     metaData*prev = NULL;
     
@@ -135,11 +131,16 @@ void * mymalloc(size_t requested_size){
 
 int main(int argc, char **argv){
 
-	printf("address of array: %p\n",myblock);
+printf("address of array: %p\n",myblock);
+    printf("\n");
 	void * pointer=mymalloc(10);
 	printf("address of pointer: %p\n",pointer);
-	void * pointer2=mymalloc(10);
-	printf("address of pointer: %p\n",pointer);
-	printf("address of pointer2: %p\n",pointer2);
+    void * pointer1=mymalloc(10);
+    printf("address of pointer1: %p\n",pointer1);
+    myfree(pointer1);
+    void * pointer2=mymalloc(10);
+    printf("address of pointer2: %p\n",pointer2);
+    printf("\n");
+    return 0;
 	
 }
