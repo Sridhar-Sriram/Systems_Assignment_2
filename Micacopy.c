@@ -22,7 +22,6 @@ metaData createNode(size_t pointerSize, char usage){
 
 void myfree(void*pointer_to_be_freed){
     
-    
     printf("ENTERED FREE\n");
     if(myblock[0] == '\0'){
         printf("Pointer does not exist \n");
@@ -38,6 +37,7 @@ void myfree(void*pointer_to_be_freed){
         printf("DIS IS ITERATOR: %d\n", iterator);
         
         if(search + 1== (metaData*)pointer_to_be_freed){
+            printf("address of pointer to be free: %p\n",pointer_to_be_freed);
             printf("I'm about to BREAK FROM THIS SHIT \n");
             break;
         }
@@ -145,7 +145,7 @@ void * mymalloc(size_t requested_size){
          3. Then, by incrementing the iterator by the sizeof(metaData) we reach the index in the array that indicates that memory can be written into.  In other words, this is the address that we return
          -
          */
-        if(search->size > requested_size && search->use == 'n' ){
+        if(search->size >= requested_size && search->use == 'n' ){
             
             // create a "used" metadata node with corresponding size
             int size_of_current_node = search->size;
@@ -155,14 +155,16 @@ void * mymalloc(size_t requested_size){
             
             int remaining_size =size_of_current_node - requested_size;
             
-            if(iterator==0){
-                iterator=(int)sizeof(metaData);
-            }
+            //THIS IS WHERE THE ERROR WAS
+            // if(iterator==0){
+            //     iterator=(int)sizeof(metaData);
+            // }
+            
             if(remaining_size >= (sizeof(metaData) + 1)){
                 metaData post_node= createNode(remaining_size, 'n');
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
             }
-            iterator = iterator + (int)sizeof(metaData);
+            iterator+=(int)sizeof(metaData);
             return &myblock[iterator];
         }
         iterator+=((int)sizeof(metaData)+search->size);
@@ -177,11 +179,21 @@ int main(int argc, char **argv){
     printf("\n");
     void * pointer=mymalloc(10);
     printf("address of pointer: %p\n",pointer);
+    myfree(pointer);
     void * pointer1=mymalloc(10);
     printf("address of pointer1: %p\n",pointer1);
-    myfree(pointer1);
     void * pointer2=mymalloc(10);
     printf("address of pointer2: %p\n",pointer2);
+    void * pointer3=mymalloc(10);
+    printf("address of pointer3: %p\n",pointer3);
+    void * pointer4=mymalloc(10);
+    printf("address of pointer4: %p\n",pointer4);
+    myfree(pointer2);
+    myfree(pointer3);
+    void * pointer5=mymalloc(10);
+    printf("address of pointer5: %p\n",pointer5);
+    void * pointer6=mymalloc(10);
+    printf("address of pointer6: %p\n",pointer6);
     printf("\n");
     return 0;
 }
