@@ -5,52 +5,124 @@
 #include <errno.h>
 #include <unistd.h>
 
+#define malloc(x) mymalloc(x, __FILE__, __LINE__)
+#define free(x) myfree(x, __FILE__, __LINE__)
+
 void testA(){
-	int i;
-	char ** pointer;
-	for(i=0,i<1000,i++){
-		pointer[i]=(char*)mymalloc(1);
-	}
+    int run=0;
+    while(run<100){
+        int i;
+        char * pointerArray[1000];
+        for(i=0,i<1000,i++){
+            pointerArray[i]=(char*)malloc(1);
+            if(pointerArray[i]==NULL){
+                break;
+            }
+        }
 
-	for(i=0,i<1000,i++){
-		pointer[i]=myfree();
-
-	}
+        for(i=0,i<1000,i++){
+            free(pointerArray[i]);
+            i++;
+        }
+    }
+	
 }
 
 void testB(){
-    int i =1;
-    for(i =1 ; i <=1000; i++){
-        char*testPointer = (char*)malloc(sizeof(char));
-        free(testPointer);
-    }
+    int run=0;
+    while(run<100){
+        int i;
+        for(i =1 ; i <=1000; i++){
+            char*testPointer = (char*)malloc(sizeof(char));
+            free(testPointer);
+        } 
+    } 
 }
 
 void testC(){
-   int iterator=0,place=0;
-   char **pointerArray[1000];
-   while(iterator!=1000){
-    int r = rand() % 2;
-    if(r=0){
-        char * pointer=malloc(1);
-        pointerArray[place];
-        place++;
-        iterator++;
+   int run=0
+   while(run<100){
+       int iterator=0,place=0;
+       char *pointerArray[1000];
+       while(iterator!=1000){
+            int random = rand() % 2;
+            if(random==0){
+                pointerArray[place]=malloc(1);
+                if(pointerArray[place]==NULL){
+                    //no more space
+                    break;
+                }
+                place++;
+                iterator++;
 
-    }
-    if(r=1){
-        if(place<=0){
-            continue;
+            }
+            else if(random==1){
+                if(place<0){
+                    place=0;
+                    continue;
+                }
+                if(pointerArray[place]==NULL){
+                    continue;
+                }
+                free(pointerArray[place]);
+                place--;
+            }
         }
-        free(pointerArray[place]);
-        place--;
-    }
+       int length=0;
+       //Freeing all pointers after malloc 1000 times.
+       while(length<1000){
+            if(pointerArray[length]==NULL){
+                break;
+            }
+            free(pointerArray[length]);
+            length++;
+       }
    }
-   //need to free all the leftover pointers
+   
     
 }
 
 void testD(){
+    int run=0
+   while(run<100){
+       int iterator=0,place=0;
+       char *pointerArray[1000];
+       while(iterator!=1000){
+            int random = rand() % 2;
+            int randomFree = rand() % 64 +1;
+            if(random==0){
+                pointerArray[place]=malloc(randomFree);
+                if(pointerArray[place]==NULL){
+                    place--;
+                   random=1;
+                   continue;
+                }
+                place++;
+                iterator++;
+            }
+
+            if(random==1){
+                if(place<0){
+                    place=0;
+                    continue;
+                }
+                if(pointerArray[place]==NULL){
+                    continue;
+                }
+                free(pointerArray[place]);
+                place--;
+            }
+        }
+       int length=0;
+       //Freeing all pointers after malloc 1000 times.
+       while(length<1000){
+            if(pointerArray[length]==NULL){
+                break;
+            }
+            free(pointerArray[length]);
+            length++;
+       }
+   }
     
 }
 
