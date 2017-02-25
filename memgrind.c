@@ -4,13 +4,17 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 #define malloc(x) mymalloc(x, __FILE__, __LINE__)
 #define free(x) myfree(x, __FILE__, __LINE__)
 
-void testA(){
-    int run=0;
+int testA(){
+    int run=0,time=0;
+
     while(run<100){
+        struct timeval start, end;
+        gettimeofday(&start, NULL);
         int i;
         char * pointerArray[1000];
         for(i=0,i<1000,i++){
@@ -24,7 +28,10 @@ void testA(){
             free(pointerArray[i]);
             i++;
         }
+        gettimeofday(&end, NULL);
+        time+=(end.tv_sec * 1000000 + end.tv_usec)- (start.tv_sec * 1000000 + start.tv_usec);
     }
+    return time/100;
 	
 }
 
@@ -94,10 +101,11 @@ void testD(){
                 if(pointerArray[place]==NULL){
                     place--;
                    random=1;
-                   continue;
                 }
-                place++;
-                iterator++;
+                else{
+                    place++;
+                    iterator++;
+                }
             }
 
             if(random==1){
