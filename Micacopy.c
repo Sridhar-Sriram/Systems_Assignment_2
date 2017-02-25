@@ -8,100 +8,21 @@
 static char myblock[5000];
 
 typedef struct _metaData{
-<<<<<<< HEAD
 	size_t size;
 	char use;
 }metaData;
 
-=======
-    size_t size;
-    char use;
-    
-}metaData;
-
-
-
-
-metaData createNode(size_t, char);
-void * mymalloc (size_t);
-void myfree(void*);
->>>>>>> cf73331985b3d6a93bd859078afdfc73abe70e7b
 // creating Nodes for proper usage
 metaData createNode(size_t pointerSize, char usage){
     metaData Node;
     Node.size=pointerSize;
     Node.use=usage;
-<<<<<<< HEAD
-=======
-    
->>>>>>> cf73331985b3d6a93bd859078afdfc73abe70e7b
     return Node;
 }
 
 void myfree(void*pointer_to_be_freed){
-<<<<<<< HEAD
-   
-   if(myblock[0] == '\0'){
-       printf("ERROR: Pointer does not exist \n");
-       return;
-   }
-   
-   int iterator = 0;
-   metaData * search = (metaData*)&myblock[0];
-   metaData*prev = NULL;
-   metaData*post = NULL;
-   
-   while(iterator<5000){
-       if(search + 1== (metaData*)&pointer_to_be_freed){
-        printf("Hello\n");
-           break;
-       }
-       prev= search;
-       iterator+=(int)sizeof(metaData) + search->size;
-       search = (metaData*)&myblock[iterator];
-      
-   }
+ 
 
-   // what type is the data stored in, in order to access
-   //metaData*user_data = (metaData*)&myblock[iterator+1];
-   iterator+=(int)sizeof(metaData)+search->size;
-   post = (metaData*)&myblock[iterator];
-   
-   /* FOR FOLLOWING CASES, y INDICATES USER DATA, n INDICATES UNUSED SPACE
-    */
-   printf("search use: %c\n",search->use);
-   if(search!=NULL){
-       if(search->use=='n' ){
-           printf("invalid free \n");
-           return;
-       }else if(search->use =='y'){
-        printf("hello\n");
-           search->use = 'n';
-           //case 2: unused space preceding freed area, user data proceeding area: N current_location Y
-           if(prev->use == 'n'&&post->use == 'y'){
-               prev->size+= (int)sizeof(metaData)+search->size;
-               return;
-           }
-           //case 3: user data preceding freed area, unused space following: Y current_location N
-           else if(prev->use == 'y'&&post->use == 'n'){
-              // search->use = 'n';
-               search->size += (int)sizeof(metaData)+post->size;
-               return;
-           }
-           // case 4: unused space preceding and proceeding freed area: N current_location N
-           else if(prev->use == 'n'&&post->use == 'n'){
-               prev->size = (int)sizeof(metaData)*2 + search->size + post->size;
-               return;
-           }
-       }
-       //case 1: user data preceding and proceeding the user data area to be free: Y current_location Y
-       
-   }else{
-       printf("invalid free \n");
-       return;
-   }
-
-=======
     printf("ENTERED FREE\n");
     if(myblock[0] == '\0'){
         printf("Pointer does not exist \n");
@@ -175,11 +96,9 @@ void myfree(void*pointer_to_be_freed){
         return;
     }
     return;
-    
->>>>>>> cf73331985b3d6a93bd859078afdfc73abe70e7b
 }
 
-void * mymalloc(size_t requested_size, char * file, int line){
+void * mymalloc(size_t requested_size){
     //checking to see if invalid size is asked for
     if((int)requested_size >(5000-(int)sizeof(metaData))){
         fprintf(stderr,"ERROR: No space available. \n");
@@ -255,21 +174,12 @@ void * mymalloc(size_t requested_size, char * file, int line){
 
 int main(int argc, char **argv){
     
-    printf("address of array: %p\n",myblock);
     printf("\n");
     void * pointer=mymalloc(10);
     printf("address of pointer: %p\n",pointer);
-    printf("\n");
-    myfree(pointer);
-    printf("\n");
     void * pointer1=mymalloc(10);
     printf("address of pointer1: %p\n",pointer1);
-    printf("\n");
     myfree(pointer1);
-<<<<<<< HEAD
-=======
-    printf("\n");
->>>>>>> cf73331985b3d6a93bd859078afdfc73abe70e7b
     void * pointer2=mymalloc(10);
     printf("address of pointer2: %p\n",pointer2);
     printf("\n");
