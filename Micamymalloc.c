@@ -21,7 +21,7 @@ metaData createNode(size_t pointerSize, char usage){
 }
 
 void myfree(void*pointer_to_be_freed){
-
+    
     printf("ENTERED FREE\n");
     if(myblock[0] == '\0'){
         printf("Pointer does not exist \n");
@@ -118,7 +118,7 @@ void * mymalloc(size_t requested_size){
         if((5000-requested_size-(int)sizeof(metaData))>=(int)(sizeof(metaData)+1)){
             metaData post_node= createNode(5000-requested_size - ((int)sizeof(metaData)*2), 'n');
             memcpy(&myblock[sizeof(metaData)+requested_size],&post_node,sizeof(metaData));
-        } 
+        }
         return &myblock[0] + sizeof(metaData);
     }
     /*
@@ -130,7 +130,7 @@ void * mymalloc(size_t requested_size){
     while(iterator<=5000){
         
         //WHAT DOES THIS DO
-
+        
         if(search==NULL){
             search=(metaData*)&myblock[iterator];
             iterator+=1;
@@ -151,25 +151,25 @@ void * mymalloc(size_t requested_size){
             int size_of_current_node = search->size;
             search->use='y';
             search->size=requested_size;
-           // int remaining_size =size_of_current_node - sizeof(metaData)-requested_size;
+            // int remaining_size =size_of_current_node - sizeof(metaData)-requested_size;
             
             int remaining_size =size_of_current_node - requested_size;
-
-            if(iterator==0){
-                iterator=(int)sizeof(metaData);
-            }
+            
+            // if(iterator==0){
+            //     iterator=(int)sizeof(metaData);
+            // }
             if(remaining_size >= (sizeof(metaData) + 1)){
                 metaData post_node= createNode(remaining_size, 'n');
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
             }
-            iterator = iterator + (int)sizeof(metaData);
+            iterator+=(int)sizeof(metaData);
             return &myblock[iterator];
         }
         iterator+=((int)sizeof(metaData)+search->size);
         search=(metaData*)&myblock[iterator];
     }
     
-    return NULL;  
+    return NULL;
 }
 
 int main(int argc, char **argv){
@@ -177,6 +177,7 @@ int main(int argc, char **argv){
     printf("\n");
     void * pointer=mymalloc(10);
     printf("address of pointer: %p\n",pointer);
+    myfree(pointer);
     void * pointer1=mymalloc(10);
     printf("address of pointer1: %p\n",pointer1);
     void * pointer2=mymalloc(10);
@@ -187,9 +188,9 @@ int main(int argc, char **argv){
     printf("address of pointer4: %p\n",pointer4);
     myfree(pointer2);
     myfree(pointer3);
-    void * pointer5=mymalloc(8);
+    void * pointer5=mymalloc(10);
     printf("address of pointer5: %p\n",pointer5);
-     void * pointer6=mymalloc(10);
+    void * pointer6=mymalloc(10);
     printf("address of pointer6: %p\n",pointer6);
     printf("\n");
     return 0;
