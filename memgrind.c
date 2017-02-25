@@ -5,34 +5,6 @@
 #include <errno.h>
 #include <unistd.h>
 
-void testA();
-void testB();
-void testC();
-void testD();
-void testE();
-void testF();
-metaData*createNode(size_t, char);
-
-typedef Struct _metaData{
-    sizet size;
-    char use;
-    
-}metaData;
-
-metaData * createNode(size_t pointerSize,char usage){
-    metaData * meta=malloc(sizeof(metaData));
-    metaData->size=pointerSize;
-    metaData->use=usage;
-    
-}
-
-
-int main(int argc, char** argv){
-    printf("Testing testB \n");
-    testB();
-    return 0;
-}
-
 void testA(){
 	int i;
 	char ** pointer;
@@ -55,6 +27,26 @@ void testB(){
 }
 
 void testC(){
+   int iterator=0,place=0;
+   char **pointerArray[1000];
+   while(iterator!=1000){
+    int r = rand() % 2;
+    if(r=0){
+        char * pointer=malloc(1);
+        pointerArray[place];
+        place++;
+        iterator++;
+
+    }
+    if(r=1){
+        if(place<=0){
+            continue;
+        }
+        free(pointerArray[place]);
+        place--;
+    }
+   }
+   //need to free all the leftover pointers
     
 }
 
@@ -68,4 +60,10 @@ void testE(){
 
 void testF(){
     
+}
+
+int main(int argc, char** argv){
+    printf("Testing testB \n");
+    testB();
+    return 0;
 }
