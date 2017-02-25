@@ -78,7 +78,6 @@ void testC(){
             length++;
        }
    }
-   
     
 }
 

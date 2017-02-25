@@ -118,7 +118,7 @@ void * mymalloc(size_t requested_size){
         if((5000-requested_size-(int)sizeof(metaData))>=(int)(sizeof(metaData)+1)){
             metaData post_node= createNode(5000-requested_size - ((int)sizeof(metaData)*2), 'n');
             memcpy(&myblock[sizeof(metaData)+requested_size],&post_node,sizeof(metaData));
-        } 
+        }
         return &myblock[0] + sizeof(metaData);
     }
     /*
@@ -130,7 +130,7 @@ void * mymalloc(size_t requested_size){
     while(iterator<=5000){
         
         //WHAT DOES THIS DO
-
+        
         if(search==NULL){
             search=(metaData*)&myblock[iterator];
             iterator+=1;
@@ -151,13 +151,15 @@ void * mymalloc(size_t requested_size){
             int size_of_current_node = search->size;
             search->use='y';
             search->size=requested_size;
-           // int remaining_size =size_of_current_node - sizeof(metaData)-requested_size;
+            // int remaining_size =size_of_current_node - sizeof(metaData)-requested_size;
             
             int remaining_size =size_of_current_node - requested_size;
 
+//THIS IS WHERE THE ERROR WAS
             // if(iterator==0){
             //     iterator=(int)sizeof(metaData);
             // }
+
             if(remaining_size >= (sizeof(metaData) + 1)){
                 metaData post_node= createNode(remaining_size, 'n');
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
@@ -169,7 +171,7 @@ void * mymalloc(size_t requested_size){
         search=(metaData*)&myblock[iterator];
     }
     
-    return NULL;  
+    return NULL;
 }
 
 int main(int argc, char **argv){
