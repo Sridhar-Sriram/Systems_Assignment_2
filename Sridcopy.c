@@ -36,11 +36,11 @@ void myfree(void*pointer_to_be_freed){
     
     while(iterator<5000){
         //        printf("DIS IS ITERATOR: %d\n", iterator);
-        printf("\n");
-        printf("ITERATOR: %d\n",iterator);
-        printf("FREE: ADDRESS OF SEARCH: %p\n",search);
-        printf("FREE: ADDRESS OF CHECK: %p\n", search+1);
-        printf("\n");
+//        printf("\n");
+//        printf("ITERATOR: %d\n",iterator);
+//        printf("FREE: ADDRESS OF SEARCH: %p\n",search);
+//        printf("FREE: ADDRESS OF CHECK: %p\n", search+1);
+//        printf("\n");
         if(search + 1== (metaData*)pointer_to_be_freed){
             //            printf("I'm about to BREAK FROM THIS SHIT \n");
             break;
@@ -173,19 +173,19 @@ void * mymalloc(size_t requested_size){
     return NULL;
 }
 
-int main(int argc, char **argv){
-    
-    printf("\n");
-    void * pointer1=mymalloc(10);
-    printf("address of pointer1: %p\n",pointer1);
-    myfree(pointer1);
-    void * pointer2=mymalloc(10);
-    printf("address of pointer2: %p\n",pointer2);
-    void * pointer3=mymalloc(10);
-    printf("address of pointer3: %p\n",pointer3);
-    printf("\n");
-    myfree(pointer2);
-    void*pointer4 = mymalloc(10);
-    printf("address of pointer4: %p\n",pointer4);
-    return 0;
-}
+//int main(int argc, char **argv){
+//    
+//    printf("\n");
+//    void * pointer1=mymalloc(10);
+//    printf("address of pointer1: %p\n",pointer1);
+//    myfree(pointer1);
+//    void * pointer2=mymalloc(10);
+//    printf("address of pointer2: %p\n",pointer2);
+//    void * pointer3=mymalloc(10);
+//    printf("address of pointer3: %p\n",pointer3);
+//    printf("\n");
+//    myfree(pointer2);
+//    void*pointer4 = mymalloc(10);
+//    printf("address of pointer4: %p\n",pointer4);
+//    return 0;
+//}

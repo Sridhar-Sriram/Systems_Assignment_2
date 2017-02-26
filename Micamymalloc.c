@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
+#define malloc(x) mymalloc(x, __FILE__, __LINE__)
+#define free(x) myfree(x, __FILE__, __LINE__)
 
 static char myblock[5000];
 
@@ -20,13 +22,13 @@ metaData createNode(size_t pointerSize, char usage){
     return Node;
 }
 
-void myfree(void*pointer_to_be_freed){
+void myfree(void*pointer_to_be_freed, char * file, int line){
     
-    printf("ENTERED FREE\n");
-    if(myblock[0] == '\0'){
-        printf("Pointer does not exist \n");
-        return;
-    }
+    // printf("ENTERED FREE\n");
+    // if(myblock[0] == '\0'){
+    //     fprintf(stderr,"Pointer does not exist %s %d \n", file, line);
+    //     return;
+    // }
     
     int iterator = 0;
     metaData * search = (metaData*)&myblock[0];
@@ -34,11 +36,11 @@ void myfree(void*pointer_to_be_freed){
     metaData*post = NULL;
     
     while(iterator<5000){
-        printf("DIS IS ITERATOR: %d\n", iterator);
+        // printf("DIS IS ITERATOR: %d\n", iterator);
         
         if(search + 1== (metaData*)pointer_to_be_freed){
-            printf("address of pointer to be free: %p\n",pointer_to_be_freed);
-            printf("I'm about to BREAK FROM THIS SHIT \n");
+            // printf("address of pointer to be free: %p\n",pointer_to_be_freed);
+            // printf("I'm about to BREAK FROM THIS SHIT \n");
             break;
         }
         prev= search;
@@ -46,6 +48,10 @@ void myfree(void*pointer_to_be_freed){
         search = (metaData*)&myblock[iterator];
         
     }
+    // if(iterator>=5000){
+    //     fprintf(stderr, "ERROR: invalid free %s %d \n", file, line);
+    //     return;
+    // }
     // what type is the data stored in, in order to access
     //metaData*user_data = (metaData*)&myblock[iterator+1];
     iterator+=(int)sizeof(metaData)+search->size;
@@ -55,11 +61,11 @@ void myfree(void*pointer_to_be_freed){
      */
     
     if(search!=NULL){
-        if(search->use=='n' ){
-            printf("invalid free \n");
+        if(search->use=='n' ||search->use=='\0'){
+            fprintf(stderr, "ERROR: invalid free %s %d \n", file, line);
             return;
         }else if(search->use =='y'){
-            printf("address of search: %p \n", search);
+            // printf("address of search: %p \n", search);
             search->use = 'n';
             //case 2: unused space preceding freed area, user data proceeding area: N current_location Y
             if(prev == NULL){
@@ -92,16 +98,16 @@ void myfree(void*pointer_to_be_freed){
             
         }
     }else{
-        printf("invalid free \n");
+        fprintf(stderr, "ERROR: Pointer not found %s %d \n", file, line);
         return;
     }
     return;
 }
 
-void * mymalloc(size_t requested_size){
+void * mymalloc(size_t requested_size, char * file, int line){
     //checking to see if invalid size is asked for
     if((int)requested_size >(5000-(int)sizeof(metaData))){
-        fprintf(stderr,"ERROR: No space available. \n");
+        fprintf(stderr,"ERROR: No space available. %s %d \n", file, line);
         return NULL;
     }
     metaData * search = (metaData*)&myblock[0];
@@ -128,8 +134,6 @@ void * mymalloc(size_t requested_size){
     
     int iterator=0;
     while(iterator<=5000){
-        
-        //WHAT DOES THIS DO
         
         if(search==NULL){
             search=(metaData*)&myblock[iterator];
@@ -169,29 +173,30 @@ void * mymalloc(size_t requested_size){
         search=(metaData*)&myblock[iterator];
     }
     
+    fprintf(stderr,"ERROR: No space available. %s %d \n", file, line);
     return NULL;
 }
 
-int main(int argc, char **argv){
-    
-    printf("\n");
-    void * pointer=mymalloc(10);
-    printf("address of pointer: %p\n",pointer);
-    myfree(pointer);
-    void * pointer1=mymalloc(10);
-    printf("address of pointer1: %p\n",pointer1);
-    void * pointer2=mymalloc(10);
-    printf("address of pointer2: %p\n",pointer2);
-    void * pointer3=mymalloc(10);
-    printf("address of pointer3: %p\n",pointer3);
-    void * pointer4=mymalloc(10);
-    printf("address of pointer4: %p\n",pointer4);
-    myfree(pointer2);
-    myfree(pointer3);
-    void * pointer5=mymalloc(10);
-    printf("address of pointer5: %p\n",pointer5);
-    void * pointer6=mymalloc(10);
-    printf("address of pointer6: %p\n",pointer6);
-    printf("\n");
-    return 0;
-}
+// int main(int argc, char **argv){
+
+//     printf("\n");
+//     void * pointer=mymalloc(10);
+//     printf("address of pointer: %p\n",pointer);
+//     myfree(pointer);
+//     void * pointer1=mymalloc(10);
+//     printf("address of pointer1: %p\n",pointer1);
+//     void * pointer2=mymalloc(10);
+//     printf("address of pointer2: %p\n",pointer2);
+//     void * pointer3=mymalloc(10);
+//     printf("address of pointer3: %p\n",pointer3);
+//     void * pointer4=mymalloc(10);
+//     printf("address of pointer4: %p\n",pointer4);
+//     myfree(pointer2);
+//     myfree(pointer3);
+//     void * pointer5=mymalloc(10);
+//     printf("address of pointer5: %p\n",pointer5);
+//     void * pointer6=mymalloc(10);
+//     printf("address of pointer6: %p\n",pointer6);
+//     printf("\n");
+//     return 0;
+// }
