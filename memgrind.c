@@ -169,10 +169,14 @@ void testF(){
 
 int main(int argc, char** argv){
 
-    printf("Test A's time: %d microseconds\n", testA());
-    printf("Test B's time: %d microseconds\n", testB());
-   printf("Test C's time: %d microseconds\n", testC());
-    printf("Test D's time: %d microseconds\n", testD());
+    char * p=(char*)malloc(1);
+    printf("address of p: %p\n",p);
+p=(char*)malloc(1);
+printf("address of p: %p\n",p);
+   //  printf("Test A's time: %d microseconds\n", testA());
+   //  printf("Test B's time: %d microseconds\n", testB());
+   // printf("Test C's time: %d microseconds\n", testC());
+   //  printf("Test D's time: %d microseconds\n", testD());
     // printf("Test E's average time was %d microseconds\n", testE());
     // printf("Test F's average time was %d microseconds\n", testF());
     return 0;
