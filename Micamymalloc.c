@@ -172,13 +172,21 @@ void * mymalloc(size_t requested_size, char * file, int line){
         iterator+=((int)sizeof(metaData)+search->size);
         search=(metaData*)&myblock[iterator];
     }
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> e99e1aafb4817a2970e8434163e487873ff4373b
     fprintf(stderr,"ERROR: No space available. %s %d \n", file, line);
     return NULL;
 }
 
 // int main(int argc, char **argv){
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> e99e1aafb4817a2970e8434163e487873ff4373b
 //     printf("\n");
 //     void * pointer=mymalloc(10);
 //     printf("address of pointer: %p\n",pointer);

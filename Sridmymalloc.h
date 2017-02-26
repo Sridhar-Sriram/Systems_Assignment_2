@@ -2,7 +2,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-<<<<<<< HEAD
 #include <errno.h>
 #include <unistd.h>
 
@@ -10,15 +9,10 @@
 #define free(x) myfree(x,__FILE__,__LINE__)
 
 typedef struct _metaData{
-    size_t size;
-    char use;
-    
-}metaData;
+	size_t size;
+	char use;
 
+}metaData;
+ 
 void * mymalloc(size_t requested_size,char * file, int line);
 void myfree(void * ptr,char * file, int line);
-=======
- 
-void * mymalloc(size_t requested_size, char * file, int line);
-void myfree(void * ptr, char * file, int line);
->>>>>>> e99e1aafb4817a2970e8434163e487873ff4373b
