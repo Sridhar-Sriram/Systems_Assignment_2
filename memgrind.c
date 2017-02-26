@@ -35,20 +35,27 @@ int testA(){
     
 }
 
-void testB(){
-    int run=0;
+int testB(){
+    int run=0,time=0;
     while(run<100){
+        struct timeval start, end;
+        gettimeofday(&start, NULL);
         int i;
         for(i =1 ; i <=1000; i++){
             char*testPointer = (char*)malloc(sizeof(char));
             free(testPointer);
         }
+        gettimeofday(&end, NULL);
+        time+=(end.tv_sec * 1000000 + end.tv_usec)- (start.tv_sec * 1000000 + start.tv_usec);
     }
+    return time/100;
 }
 
-void testC(){
-    int run=0
+int testC(){
+    int run=0,time=0;
     while(run<100){
+        struct timeval start, end;
+        gettimeofday(&start, NULL);
         int iterator=0,place=0;
         char *pointerArray[1000];
         while(iterator!=1000){
@@ -84,13 +91,18 @@ void testC(){
             free(pointerArray[length]);
             length++;
         }
+        gettimeofday(&end, NULL);
+        time+=(end.tv_sec * 1000000 + end.tv_usec)- (start.tv_sec * 1000000 + start.tv_usec);
     }
+    return time/100;
     
 }
 
-void testD(){
-    int run=0
+int testD(){
+    int run=0,time=0;
     while(run<100){
+        struct timeval start, end;
+        gettimeofday(&start, NULL);
         int iterator=0,place=0;
         char *pointerArray[1000];
         while(iterator!=1000){
@@ -129,7 +141,10 @@ void testD(){
             free(pointerArray[length]);
             length++;
         }
+        gettimeofday(&end, NULL);
+        time+=(end.tv_sec * 1000000 + end.tv_usec)- (start.tv_sec * 1000000 + start.tv_usec);
     }
+    return time/100;
     
 }
 
