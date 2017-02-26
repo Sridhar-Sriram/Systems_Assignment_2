@@ -2,6 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include <errno.h>
 #include <unistd.h>
 
@@ -16,3 +17,8 @@ typedef struct _metaData{
 
 void * mymalloc(size_t requested_size,char * file, int line);
 void myfree(void * ptr,char * file, int line);
+=======
+ 
+void * mymalloc(size_t requested_size, char * file, int line);
+void myfree(void * ptr, char * file, int line);
+>>>>>>> e99e1aafb4817a2970e8434163e487873ff4373b
