@@ -17,14 +17,14 @@ int testA(){
         gettimeofday(&start, NULL);
         int i;
         char * pointerArray[1000];
-        for(i=0,i<1000,i++){
+        for(i=0;i<1000;i++){
             pointerArray[i]=(char*)malloc(1);
             if(pointerArray[i]==NULL){
                 break;
             }
         }
         
-        for(i=0,i<1000,i++){
+        for(i=0;i<1000;i++){
             free(pointerArray[i]);
             i++;
         }
@@ -61,7 +61,7 @@ int testC(){
         while(iterator!=1000){
             int random = rand() % 2;
             if(random==0){
-                pointerArray[place]=malloc(1);
+                pointerArray[place]=(char*)malloc(1);
                 if(pointerArray[place]==NULL){
                     //no more space
                     break;
@@ -109,7 +109,7 @@ int testD(){
             int random = rand() % 2;
             int randomFree = rand() % 64 +1;
             if(random==0){
-                pointerArray[place]=malloc(randomFree);
+                pointerArray[place]=(char*)malloc(randomFree);
                 if(pointerArray[place]==NULL){
                     place--;
                     random=1;
@@ -157,7 +157,11 @@ void testF(){
 }
 
 int main(int argc, char** argv){
-    printf("Testing testB \n");
-    testB();
+    printf("Test A's time: %d microseconds\n", testA());
+    printf("Test B's time: %d microseconds\n", testB());
+    printf("Test C's time: %d microseconds\n", testC());
+    printf("Test D's time: %d microseconds\n", testD());
+    // printf("Test E's average time was %d microseconds\n", testE());
+    // printf("Test F's average time was %d microseconds\n", testF());
     return 0;
 }
