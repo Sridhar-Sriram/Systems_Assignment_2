@@ -24,23 +24,14 @@ metaData createNode(size_t pointerSize, char usage){
 
 void myfree(void*pointer_to_be_freed, char * file, int line){
     
-    // printf("ENTERED FREE\n");
-    // if(myblock[0] == '\0'){
-    //     fprintf(stderr,"Pointer does not exist %s %d \n", file, line);
-    //     return;
-    // }
-    
     int iterator = 0;
     metaData * search = (metaData*)&myblock[0];
     metaData*prev = NULL;
     metaData*post = NULL;
     
     while(iterator<5000){
-        // printf("DIS IS ITERATOR: %d\n", iterator);
         
         if(search + 1== (metaData*)pointer_to_be_freed){
-            // printf("address of pointer to be free: %p\n",pointer_to_be_freed);
-            // printf("I'm about to BREAK FROM THIS SHIT \n");
             break;
         }
         prev= search;
@@ -48,12 +39,6 @@ void myfree(void*pointer_to_be_freed, char * file, int line){
         search = (metaData*)&myblock[iterator];
         
     }
-    // if(iterator>=5000){
-    //     fprintf(stderr, "ERROR: invalid free %s %d \n", file, line);
-    //     return;
-    // }
-    // what type is the data stored in, in order to access
-    //metaData*user_data = (metaData*)&myblock[iterator+1];
     iterator+=(int)sizeof(metaData)+search->size;
     post = (metaData*)&myblock[iterator];
     
@@ -127,11 +112,6 @@ void * mymalloc(size_t requested_size, char * file, int line){
         }
         return &myblock[0] + sizeof(metaData);
     }
-    /*
-     - ACTUAL SEARCH
-     -
-     */
-    
     int iterator=0;
     while(iterator<=5000){
         
@@ -155,13 +135,8 @@ void * mymalloc(size_t requested_size, char * file, int line){
             int size_of_current_node = search->size;
             search->use='y';
             search->size=requested_size;
-            // int remaining_size =size_of_current_node - sizeof(metaData)-requested_size;
             
             int remaining_size =size_of_current_node - requested_size;
-            
-            // if(iterator==0){
-            //     iterator=(int)sizeof(metaData);
-            // }
             if(remaining_size >= (sizeof(metaData) + 1)){
                 metaData post_node= createNode(remaining_size, 'n');
                 memcpy(&myblock[iterator+(int)sizeof(metaData)+search->size],&post_node,sizeof(metaData));
@@ -177,26 +152,3 @@ void * mymalloc(size_t requested_size, char * file, int line){
     return NULL;
 }
 
-// int main(int argc, char **argv){
-
-//     printf("\n");
-//     void * pointer=mymalloc(10);
-//     printf("address of pointer: %p\n",pointer);
-//     myfree(pointer);
-//     void * pointer1=mymalloc(10);
-//     printf("address of pointer1: %p\n",pointer1);
-//     void * pointer2=mymalloc(10);
-//     printf("address of pointer2: %p\n",pointer2);
-//     void * pointer3=mymalloc(10);
-//     printf("address of pointer3: %p\n",pointer3);
-//     void * pointer4=mymalloc(10);
-//     printf("address of pointer4: %p\n",pointer4);
-//     myfree(pointer2);
-//     myfree(pointer3);
-//     void * pointer5=mymalloc(10);
-//     printf("address of pointer5: %p\n",pointer5);
-//     void * pointer6=mymalloc(10);
-//     printf("address of pointer6: %p\n",pointer6);
-//     printf("\n");
-//     return 0;
-// }
