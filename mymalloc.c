@@ -50,7 +50,7 @@ void myfree(void*pointer_to_be_freed, char * file, int line){
         }else if(search->use =='y'){
             // printf("address of search: %p \n", search);
             search->use = 'n';
-            //case 2: unused space preceding freed area, user data proceeding area: N current_location Y
+            //case 1: unused space preceding freed area, user data proceeding area: N current_location Y
             if(prev == NULL){
                 if(post !=NULL){
                     if(post->use == 'n'){
@@ -65,13 +65,13 @@ void myfree(void*pointer_to_be_freed, char * file, int line){
                     prev->size+= (int)sizeof(metaData)+search->size;
                     return;
                 }
-                //case 3: user data preceding freed area, unused space following: Y current_location N
+                //case 2: user data preceding freed area, unused space following: Y current_location N
                 else if(prev->use == 'y'&&post->use == 'n'){
                     // search->use = 'n';
                     search->size += (int)sizeof(metaData)+post->size;
                     return;
                 }
-                // case 4: unused space preceding and proceeding freed area: N current_location N
+                // case 3: unused space preceding and proceeding freed area: N current_location N
                 else if(prev->use == 'n'&&post->use == 'n'){
                     prev->size = (int)sizeof(metaData)*2 + search->size + post->size;
                     return;
