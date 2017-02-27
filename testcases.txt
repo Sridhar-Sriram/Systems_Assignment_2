@@ -1,0 +1,5 @@
+Micole FinehartMcf155Sridhar SriramSss293Assignment 1: Memory Allocation++ Test E:The entire premise behind Test E was to test whether or not our program was robust enough to handle a methodical process of malloc-ing and free-ing.  In Test E, our program makes malloc calls of size 5 until the capacity of memory is reached. It goes through the array of malloced memory and frees every other pointer. Finally, it goes through the entire array again and re-mallocs the pointers that were just freed. We included this test case because it shows that we do not have to malloc and free in the order of the array, but from different places in the array. 
+
+Test F:
+
+Test F has a similar approach to Test E. We start by mallocing pointers of size 5 until the capacity of the memory is reached. Once capacity is reached we print out the error statement to show that it is unable to malloc and then break from the loop. Test F then goes through the array again and frees every other two pointers. This test shows that all pointers can either freed in a row or not without affecting the still malloced pointers and leaving gaps in memory to be  re-malloced.
