@@ -6,8 +6,6 @@
 #include "Sridmymalloc.h"
 
 
-
-
 int testA(){
     int run=0,time=0;
     
@@ -66,7 +64,6 @@ int testC(){
         char *pointerArray[1000];
         //num_malloc_calls keeps track of the number of malloc calls made
         while(num_malloc_calls<1000){
-            printf("iterator : %d\n",num_malloc_calls);
             int random = rand() % 2;
             if(random==0){
                 pointerArray[place]=(char*)malloc(1);
@@ -92,11 +89,6 @@ int testC(){
                 free(pointerArray[place]);
                 pointerArray[place] = NULL;
             }
-//            if(num_malloc_calls==1000){
-//                printf("lit i'm about to increment\n");
-//                break;
-//            }
-
         }
         printf("exited the iterator loop!\n");
         int length=0;
@@ -124,7 +116,6 @@ int testD(){
         int num_malloc_calls=0,place=0;
         char *pointerArray[1000];
         while(num_malloc_calls<1000){
-            printf("iterator : %d\n", num_malloc_calls);
             int random = rand() % 2;
             // printf("random: %d\n",random);
             // printf("iterator: %d\n",iterator);
@@ -175,12 +166,6 @@ int testD(){
 }
 
 int testE(){
-    /*
-     continuous malloc calls of size 1 to capacity
-     then, free every OTHER element 
-     then, again until capacity
-     testing robustness
-     */
     int run=0,time=0;
     while(run<100){
         struct timeval start, end;
@@ -202,13 +187,14 @@ int testE(){
             place +=2;
         }
         place = 1;
-        while(place<placerep){
+        
+        for(place =0; place<placerep;place++){
             if(pointerArray[place] == NULL){
+                pointerArray[place] =(char*)malloc(5);
+            }else{
                 continue;
             }
-            free(pointerArray[place]);
-            pointerArray[place]=NULL;
-            place+=3;
+            
         }
         
         gettimeofday(&end, NULL);
@@ -216,10 +202,53 @@ int testE(){
         run++;
     }
     return time/100;
-//
 }
 
 void testF(){
+//    
+//    int run=0,time=0;
+//    while(run<100){
+//        struct timeval start, end;
+//        gettimeofday(&start, NULL);
+//        int iterator=0,place=0;
+//        char *pointerArray[1000];
+//        while(iterator <1000){
+//            pointerArray[place] = (char*)malloc(5);
+//            if(pointerArray[place] == NULL){
+//                break;
+//            }
+//            place++;
+//        }
+//        int placerep = place;
+//        place = 0;
+//        while(place<placerep){
+//            free(pointerArray[place]);
+//            pointerArray[place] = NULL;
+//            place +=2;
+//        }
+//        place = 1;
+//        for(place = 1; place<placerep;place+=3){
+//            if(pointerArray[place] == NULL){
+//                continue;
+//            }
+//            free(pointerArray[place]);
+//            pointerArray[place]=NULL;
+//            place+=3;
+//        }
+//    
+//        for(place =0; place<rep;place++){
+//            if(pointerArray[place] == NULL){
+//                pointerArray[place] =
+//            }
+//        
+//        }
+//        
+//        gettimeofday(&end, NULL);
+//        time+=(end.tv_sec * 1000000 + end.tv_usec)- (start.tv_sec * 1000000 + start.tv_usec);
+//        run++;
+//    }
+//    return time/100;
+//
     
 }
 
@@ -230,6 +259,6 @@ int main(int argc, char** argv){
     printf("Test C's average time: %d microseconds\n", testC());
     printf("Test D's average time: %d microseconds\n", testD());
     printf("Test E's average time was %d microseconds\n", testE());
-    // printf("Test F's average time was %d microseconds\n", testF());
+    //printf("Test F's average time was %d microseconds\n", testF());
     return 0;
 }
